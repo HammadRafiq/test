@@ -11,18 +11,36 @@ export const TextFieldWrapper = ({
   hint,
   icon,
   type,
+  label,
+  border = "1px solid black",
+  padding = "5px 15px",
+  fontSize = "14px",
   ...props
 }) => {
   const [field, meta] = useField(props);
   const [showPassword, setShowPassword] = useState(false);
 
+  const commonInputProps = {
+    disableUnderline: true,
+    sx: {
+      padding: padding,
+      border: border,
+      fontSize: fontSize
+    }
+  }
+
   return (
     <div>
+      <label>
+        {label}
+      </label>
       <TextField
         fullWidth
-        sx={{ mt: 1 }}
+        sx={{
+          mt: 1,
+        }}
         {...field}
-        variant="outlined"
+        variant="standard"
         error={!!(meta.touched && meta.error)}
         {...props}
         autoComplete="off"
@@ -32,19 +50,23 @@ export const TextFieldWrapper = ({
         InputProps={
           type === "password"
             ? {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      sx={{ color: "secondary.main" }}
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }
-            : { endAdornment: null }
+              ...commonInputProps,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    sx={{ color: "secondary.main" }}
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }
+            : {
+              ...commonInputProps,
+              endAdornment: null,
+            }
         }
       />
       <Box position="relative">
@@ -58,26 +80,20 @@ export const TextFieldWrapper = ({
             {hint}
           </Typography>
         </Box>
-        {meta.touched && meta.error ? (
+        {meta.error && (
           <Box
             sx={{
               display: "flex",
-              justifyContent: "end",
+              justifyContent: "start",
               alignItems: "center",
-              position: "absolute",
-              right: "5px",
             }}
           >
             <ErrorMessage
               component="div"
               name={field.name}
-              className="error font-size-12 font-weight-500 dark-washed-red font-family-poppins"
             />
-            {/* <Box sx={{ ml: 1 }}>
-              <img src={infoerror} alt="info" />
-            </Box> */}
           </Box>
-        ) : null}
+        )}
       </Box>
     </div>
   );
