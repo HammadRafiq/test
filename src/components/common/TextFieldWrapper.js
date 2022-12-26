@@ -48,25 +48,40 @@ export const TextFieldWrapper = ({
         disabled={props.disabled}
         type={showPassword ? "text" : type}
         InputProps={
-          type === "password"
-            ? {
+          props.startIcon ? {
+            ...commonInputProps,
+            startAdornment: (
+              <InputAdornment position="start">
+                {props.startIcon}
+              </InputAdornment>
+            ),
+          } :
+            props.endIcon ? {
               ...commonInputProps,
               endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    sx={{ color: "secondary.main" }}
-                    aria-label="toggle password visibility"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
+                <InputAdornment position="start">
+                  {props.endIcon}
                 </InputAdornment>
               ),
-            }
-            : {
-              ...commonInputProps,
-              endAdornment: null,
-            }
+            } :
+              type === "password"
+                ? {
+                  ...commonInputProps,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        sx={{ color: "secondary.main" }}
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }
+                : {
+                  ...commonInputProps,
+                }
         }
       />
       <Box position="relative">
