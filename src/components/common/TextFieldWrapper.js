@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { ErrorMessage, useField } from "formik";
 // import infoerror from "src/assets/register/infoerror.svg";
@@ -20,14 +20,16 @@ export const TextFieldWrapper = ({
   const [field, meta] = useField(props);
   const [showPassword, setShowPassword] = useState(false);
 
-  const commonInputProps = {
-    disableUnderline: true,
-    sx: {
-      padding: padding,
-      border: border,
-      fontSize: fontSize
+  const commonInputProps = useMemo(() => {
+    return {
+      disableUnderline: true,
+      sx: {
+        padding: padding,
+        border: border,
+        fontSize: fontSize
+      }
     }
-  }
+  }, [])
 
   return (
     <div>
@@ -42,7 +44,6 @@ export const TextFieldWrapper = ({
         {...field}
         variant="standard"
         error={!!(meta.touched && meta.error)}
-        {...props}
         autoComplete="off"
         size={props.size}
         disabled={props.disabled}
@@ -83,6 +84,7 @@ export const TextFieldWrapper = ({
                   ...commonInputProps,
                 }
         }
+        {...props}
       />
       <Box position="relative">
         <Box sx={{ position: "absolute", left: "10px" }}>
